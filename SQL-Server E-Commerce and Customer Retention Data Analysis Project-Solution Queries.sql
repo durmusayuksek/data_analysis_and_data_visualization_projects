@@ -177,12 +177,12 @@ ORDER BY month, year
 -- 2. Calculate the month-wise retention rate.
 
 SELECT year, month,
-ROUND(CAST(SUM(CASE WHEN next_visit_month - current_month = 1 THEN 1 ELSE 0 END) AS FLOAT) / lag(COUNT(cust_id), 1) OVER(ORDER BY year, month), 2) AS retention_rate
+ROUND(CAST(SUM(CASE WHEN next_visit_month - current_month = 1 THEN 1 ELSE 0 END) AS FLOAT) / LAG(COUNT(cust_id), 1) OVER(ORDER BY year, month), 2) AS retention_rate
 FROM monthly_cust_table
 GROUP BY year, month
 EXCEPT
 SELECT year, month,
-ROUND(CAST(SUM(CASE WHEN next_visit_month - current_month = 1 THEN 1 ELSE 0 END) AS FLOAT) / lag(COUNT(cust_id), 1) OVER(ORDER BY year, month), 2) AS retention_rate
+ROUND(CAST(SUM(CASE WHEN next_visit_month - current_month = 1 THEN 1 ELSE 0 END) AS FLOAT) / LAG(COUNT(cust_id), 1) OVER(ORDER BY year, month), 2) AS retention_rate
 FROM monthly_cust_table
 WHERE (YEAR = (SELECT YEAR(MIN(order_date)) FROM combined_table) AND month = (SELECT MONTH(MIN(order_date)) FROM combined_table)) 
 OR (YEAR = (SELECT YEAR(MAX(order_date)) FROM combined_table) AND month = (SELECT MONTH(MAX(order_date)) FROM combined_table))
