@@ -126,7 +126,8 @@ as
 begin 
     declare @total_credit int 
     declare @result varchar(10)
-    select @total_credit = sum(c.course_credit) from course c join student_course sc on c.course_id=sc.course_id where sc.student_id = @student_id
+    select @total_credit = sum(c.course_credit) from course c join student_course sc on c.course_id=sc.course_id 
+        where sc.student_id = @student_id
     if @total_credit <= 180
         set @result = 'True'
     else 
@@ -145,12 +146,9 @@ as
 begin 
     declare @result varchar(20)
     declare @student_result varchar(20) 
-    declare @course_result varchar(10)
     select @student_result = region from student where student_id = @student_id
-    select @course_result = st.region from course c join staff_course sc on c.course_id=sc.course_id 
-        join staff st on sc.staff_id=st.staff_id 
-        where c.course_id = @course_id
-    if @student_result = @course_result
+    if @student_result in (select st.region from course c join staff_course sc on c.course_id=sc.course_id 
+        join staff st on sc.staff_id=st.staff_id where c.course_id = @course_id)
         set @result = 'True'
     else 
         set @result = 'False'
