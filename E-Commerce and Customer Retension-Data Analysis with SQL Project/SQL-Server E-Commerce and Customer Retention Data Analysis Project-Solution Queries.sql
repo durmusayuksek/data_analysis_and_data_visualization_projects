@@ -60,7 +60,7 @@ AS (
 )
 SELECT DISTINCT t4.cust_id, t4.first_order, t4.third_order,
 DATEDIFF(DAY, (SELECT MIN(order_date) FROM combined_table), t4.third_order ) - 
-DATEDIFF(DAY, (SELECT MIN(order_date) FROM combined_table), t4.first_order)
+DATEDIFF(DAY, (SELECT MIN(order_date) FROM combined_table), t4.first_order) AS days_taken
 FROM
     (SELECT t3.cust_id, 
     CASE WHEN t3.birinci IS NOT NULL THEN t3.birinci ELSE LAG(t3.birinci) 
